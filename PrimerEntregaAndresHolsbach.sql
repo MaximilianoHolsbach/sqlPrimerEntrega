@@ -3,6 +3,8 @@ CREATE DATABASE IF NOT EXISTS chaco_print;
 
 USE chaco_print;
 
+/* PERTENECE AL SEGMENTO IDENTIFICACION DE EQUIPO */
+
 CREATE TABLE IF NOT EXISTS marca(
 id_marca INT NOT NULL AUTO_INCREMENT,
 nombre_marca varchar(100) NOT NULL UNIQUE,
@@ -32,6 +34,8 @@ PRIMARY KEY(serie_equipo),
 FOREIGN KEY(id_marca) REFERENCES marca(id_marca),
 FOREIGN KEY(id_modelo) REFERENCES modelo(id_modelo)
 );
+
+/* PERTENECE AL SEGMENTO DATOS DEL CLIENTE */
 
 CREATE TABLE IF NOT EXISTS provincia(
 id_provincia INT NOT NULL AUTO_INCREMENT,
@@ -66,6 +70,8 @@ PRIMARY KEY(id_email),
 FOREIGN KEY(email_pertenece) REFERENCES cliente(id_cliente)
 );
 
+/* PERTENECE AL SEGMENTO DATOS DE STOCK */
+
 CREATE TABLE IF NOT EXISTS stock(
 id_producto varchar(100) NOT NULL,
 tipo_producto varchar(100),
@@ -82,6 +88,15 @@ FOREIGN KEY(id_modelo) REFERENCES modelo(id_modelo),
 FOREIGN KEY(id_producto) REFERENCES stock(id_producto)
 );
 
+/* PERTENECE AL SEGMENTO DATOS DE RRHH */
+
+CREATE TABLE IF NOT EXISTS puesto(
+id_puesto INT NOT NULL AUTO_INCREMENT,
+nombre_puesto varchar(50),
+descripcion_puesto varchar(100),
+PRIMARY KEY(id_puesto)
+);
+
 CREATE TABLE IF NOT EXISTS rrhh(
 id_trabajador INT NOT NULL AUTO_INCREMENT,
 nombre_trabajador varchar(100),
@@ -89,7 +104,31 @@ apellido_trabajador varchar(100),
 direccion_trabajador varchar(100),
 telefono_trabajador varchar(100),
 email_trabajador varchar(100),
-puesto_trabajador varchar(100),
+puesto_trabajador INT NOT NULL,
 fecha_ingreso timestamp default current_timestamp,
-PRIMARY KEY(id_trabajador)
+PRIMARY KEY(id_trabajador),
+FOREIGN KEY(puesto_trabajador) REFERENCES puesto(id_puesto)
+);
+
+CREATE TABLE IF NOT EXISTS trabajo(
+id_trabajo INT NOT NULL AUTO_INCREMENT,
+nombre_trabajo varchar(50),
+descripcion_trabajo varchar(100),
+PRIMARY KEY(id_trabajo)
+);
+
+/* PERTENECE AL SEGMENTO DATOS DE COMERCIALIZACION */
+
+CREATE TABLE IF NOT EXISTS venta(
+id_venta INT NOT NULL AUTO_INCREMENT,
+id_cliente INT NOT NULL,
+id_producto varchar(100) NOT NULL,
+id_trabajador INT NOT NULL,
+id_trabajo INT NOT NULL,
+fecha_venta timestamp default current_timestamp,
+PRIMARY KEY(id_venta),
+FOREIGN KEY(id_cliente) REFERENCES cliente(id_cliente),
+FOREIGN KEY(id_producto) REFERENCES stock(id_producto),
+FOREIGN KEY(id_trabajador) REFERENCES rrhh(id_trabajador),
+FOREIGN KEY(id_trabajo) REFERENCES trabajo(id_trabajo)
 );
