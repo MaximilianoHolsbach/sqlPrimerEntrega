@@ -15,12 +15,12 @@ CREATE TABLE IF NOT EXISTS modelo(
 id_modelo INT NOT NULL AUTO_INCREMENT,
 nombre_modelo varchar(100) NOT NULL UNIQUE,
 id_marca INT NOT NULL,
-fotocopia ENUM('si','no'),
-imprime ENUM('si','no'),
-escanea ENUM('si','no'),
-monocromo ENUM('si','no'),
-color ENUM('si','no'),
-cantidad INT,
+fotocopia ENUM('si','no','NN') default 'NN',
+imprime ENUM('si','no','NN') default 'NN',
+escanea ENUM('si','no','NN') default 'NN',
+monocromo ENUM('si','no','NN') default 'NN',
+color ENUM('si','no','NN') default 'NN',
+cantidad INT default 0,
 PRIMARY KEY(id_modelo),
 FOREIGN KEY(id_marca) REFERENCES marca(id_marca)
 );
@@ -29,7 +29,7 @@ CREATE TABLE IF NOT EXISTS equipo(
 serie_equipo varchar(100) NOT NULL,
 id_marca INT NOT NULL,
 id_modelo INT NOT NULL,
-contador INT,
+contador INT default 0,
 PRIMARY KEY(serie_equipo),
 FOREIGN KEY(id_marca) REFERENCES marca(id_marca),
 FOREIGN KEY(id_modelo) REFERENCES modelo(id_modelo)
@@ -74,16 +74,16 @@ FOREIGN KEY(email_pertenece) REFERENCES cliente(id_cliente)
 
 CREATE TABLE IF NOT EXISTS stock(
 id_producto varchar(100) NOT NULL,
-tipo_producto varchar(100),
-nombre_producto varchar(100),
-precio_producto float8,
-cantidad INT,
+tipo_producto varchar(100) NOT NULL,
+nombre_producto varchar(100) NOT NULL,
+precio_producto float8 default 0.0,
+cantidad INT default 0,
 PRIMARY KEY(id_producto)
 );
 
 CREATE TABLE IF NOT EXISTS compatible(
 id_modelo INT NOT NULL,
-id_producto varchar(100) NULL,
+id_producto varchar(100) NOT NULL,
 FOREIGN KEY(id_modelo) REFERENCES modelo(id_modelo),
 FOREIGN KEY(id_producto) REFERENCES stock(id_producto)
 );
@@ -112,8 +112,8 @@ FOREIGN KEY(puesto_trabajador) REFERENCES puesto(id_puesto)
 
 CREATE TABLE IF NOT EXISTS trabajo(
 id_trabajo INT NOT NULL AUTO_INCREMENT,
-nombre_trabajo varchar(50),
-descripcion_trabajo varchar(100),
+nombre_trabajo varchar(50) NOT NULL,
+descripcion_trabajo varchar(100) NOT NULL,
 PRIMARY KEY(id_trabajo)
 );
 
