@@ -1,4 +1,4 @@
-DROP DATABASE IF EXISTS chaco_print;
+ DROP DATABASE IF EXISTS chaco_print;
 CREATE DATABASE IF NOT EXISTS chaco_print;
 
 USE chaco_print;
@@ -22,7 +22,7 @@ monocromo ENUM('si','no','NN') default 'NN',
 color ENUM('si','no','NN') default 'NN',
 cantidad INT default 0,
 PRIMARY KEY(id_modelo),
-FOREIGN KEY(id_marca) REFERENCES marca(id_marca)
+FOREIGN KEY(id_marca) REFERENCES marca(id_marca) ON DELETE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS equipo(
@@ -31,8 +31,8 @@ id_marca INT NOT NULL,
 id_modelo INT NOT NULL,
 contador INT default 0,
 PRIMARY KEY(serie_equipo),
-FOREIGN KEY(id_marca) REFERENCES marca(id_marca),
-FOREIGN KEY(id_modelo) REFERENCES modelo(id_modelo)
+FOREIGN KEY(id_marca) REFERENCES marca(id_marca) ON DELETE CASCADE,
+FOREIGN KEY(id_modelo) REFERENCES modelo(id_modelo) ON DELETE CASCADE
 );
 
 /* PERTENECE AL SEGMENTO DATOS DEL CLIENTE */
@@ -51,7 +51,7 @@ direccion_cliente varchar(100) NOT NULL,
 id_provincia INT NOT NULL,
 sector_cliente varchar(100) NOT NULL,
 PRIMARY KEY(id_cliente),
-FOREIGN KEY(id_provincia) REFERENCES provincia(id_provincia)
+FOREIGN KEY(id_provincia) REFERENCES provincia(id_provincia) ON DELETE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS telefono_cliente(
@@ -59,7 +59,7 @@ id_telefono INT NOT NULL AUTO_INCREMENT,
 numero_telefono varchar(100) NOT NULL,
 telefono_pertenece INT NOT NULL,
 PRIMARY KEY(id_telefono),
-FOREIGN KEY(telefono_pertenece) REFERENCES cliente(id_cliente)
+FOREIGN KEY(telefono_pertenece) REFERENCES cliente(id_cliente) ON DELETE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS email_cliente(
@@ -67,7 +67,7 @@ id_email INT NOT NULL AUTO_INCREMENT,
 direccion_email varchar(100) NOT NULL,
 email_pertenece INT NOT NULL,
 PRIMARY KEY(id_email), 
-FOREIGN KEY(email_pertenece) REFERENCES cliente(id_cliente)
+FOREIGN KEY(email_pertenece) REFERENCES cliente(id_cliente) ON DELETE CASCADE
 );
 
 /* PERTENECE AL SEGMENTO DATOS DE STOCK */
@@ -84,8 +84,8 @@ PRIMARY KEY(id_producto)
 CREATE TABLE IF NOT EXISTS compatible(
 id_modelo INT NOT NULL,
 id_producto varchar(100) NOT NULL,
-FOREIGN KEY(id_modelo) REFERENCES modelo(id_modelo),
-FOREIGN KEY(id_producto) REFERENCES stock(id_producto)
+FOREIGN KEY(id_modelo) REFERENCES modelo(id_modelo) ON DELETE CASCADE,
+FOREIGN KEY(id_producto) REFERENCES stock(id_producto) ON DELETE CASCADE
 );
 
 /* PERTENECE AL SEGMENTO DATOS DE RRHH */
@@ -107,7 +107,7 @@ email_trabajador varchar(100),
 puesto_trabajador INT NOT NULL,
 fecha_ingreso timestamp default current_timestamp,
 PRIMARY KEY(id_trabajador),
-FOREIGN KEY(puesto_trabajador) REFERENCES puesto(id_puesto)
+FOREIGN KEY(puesto_trabajador) REFERENCES puesto(id_puesto) ON DELETE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS trabajo(
@@ -127,8 +127,8 @@ id_trabajador INT NOT NULL,
 id_trabajo INT NOT NULL,
 fecha_venta timestamp default current_timestamp,
 PRIMARY KEY(id_venta),
-FOREIGN KEY(id_cliente) REFERENCES cliente(id_cliente),
-FOREIGN KEY(id_producto) REFERENCES stock(id_producto),
-FOREIGN KEY(id_trabajador) REFERENCES rrhh(id_trabajador),
-FOREIGN KEY(id_trabajo) REFERENCES trabajo(id_trabajo)
+FOREIGN KEY(id_cliente) REFERENCES cliente(id_cliente) ON DELETE CASCADE,
+FOREIGN KEY(id_producto) REFERENCES stock(id_producto) ON DELETE CASCADE,
+FOREIGN KEY(id_trabajador) REFERENCES rrhh(id_trabajador) ON DELETE CASCADE,
+FOREIGN KEY(id_trabajo) REFERENCES trabajo(id_trabajo) ON DELETE CASCADE
 );
